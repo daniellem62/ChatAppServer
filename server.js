@@ -1,11 +1,11 @@
-const https = require('https');
-const socketIo = require('socket.io');
-const fs = require('fs')
+const https = require("https");
+const socketIo = require("socket.io");
+const fs = require("fs");
 
 const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/chathive.me/privkey.pem'),  // Path to the private key
-  cert: fs.readFileSync('/etc/letsencrypt/live/chathive.me/fullchain.pem'),  // Path to the certificate
-  minVersion: 'TLSv1.2',
+  key: fs.readFileSync("/etc/letsencrypt/live/chathive.me/privkey.pem"), // Path to the private key
+  cert: fs.readFileSync("/etc/letsencrypt/live/chathive.me/fullchain.pem"), // Path to the certificate
+  minVersion: "TLSv1.2",
 };
 
 // Pass the options to createServer
@@ -16,38 +16,36 @@ const io = socketIo(server, {
     origin: ["https://chat-app-lyart-chi.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-customer-header"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
-const users = {}
+const users = {};
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("a user connected");
 
-
-socket.on('set username', (username) => {
-users[socket.id] = username
-console.log(`${username} connected`);
-io.emit('user list', Object.values(users));
-io.emit('user joined', username)
-});
-
-
-
-  socket.on('chat message', (msg) => {
-console.log("Message received from client:", msg); 
-    io.emit('chat message', msg);
+  socket.on("set username", (username) => {
+    users[socket.id] = username;
+    console.log(`${username} connected`);
+    io.emit("user list", Object.values(users));
+    io.emit("user joined", username);
   });
-  socket.on('disconnect', () => {
-const username = socket.username
+
+  socket.on("chat message", (msg) => {
+    console.log("Message received from client:", msg);
+    io.emit("chat message", msg);
+  });
+
+  socket.on("disconnect", () => {
+    const username = socket.username;
     console.log(`${username} disconnected`);
-delete users[socket.id]
+    delete users[socket.id];
 
-io.emit('user list', Object.values(users));
+    io.emit("user list", Object.values(users));
   });
 });
 
-server.listen(3000, '0.0.0.0', () => {
-  console.log('Server is running on port 3000');
+server.listen(3000, "0.0.0.0", () => {
+  console.log("Server is running on port 3000");
 });
