@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const username = socket.username;
+    const username = users[socket.id];
     console.log(`${username} disconnected`);
     delete users[socket.id];
 
