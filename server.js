@@ -43,6 +43,7 @@ io.on("connection", (socket) => {
     delete users[socket.id];
 
     io.emit("user list", Object.values(users));
+    io.emit("user left", username);
   });
 });
 
