@@ -39,11 +39,13 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     const username = users[socket.id];
-    console.log(`${username} disconnected`);
+    if (username) {
+      console.log(`${username} disconnected`);
+      io.emit("user left", username); // emit the leave event
+    }
     delete users[socket.id];
 
     io.emit("user list", Object.values(users));
-    io.emit("user left", username);
   });
 });
 
