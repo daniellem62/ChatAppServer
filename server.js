@@ -13,7 +13,7 @@ const server = https.createServer(options);
 
 const io = socketIo(server, {
   cors: {
-    origin: ["https://chat-app-lyart-chi.vercel.app", "http://localhost:3000"],
+    origin: ["https://www.chathive.me:3000/", "http://localhost:3000"],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-customer-header"],
     credentials: true,
